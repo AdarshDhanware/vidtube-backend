@@ -30,4 +30,7 @@ const uploadOnCloudinary = async (localfilePath) =>{
     }
 }
 
+// delete previous uploaded file from the cloud server
+// const deleteFileFromTheCloudinary=async ()
+
 export {uploadOnCloudinary}
