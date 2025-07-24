@@ -3,6 +3,8 @@ import {
     UpdateUserAvatar,
     changeCurrentPassword,
     getCurrentUser,
+    getUserChannelProfile,
+    getWatchHistory,
     loginUser,
     logoutUser,
     refreshAccessToken,
@@ -35,17 +37,28 @@ router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJwt, logoutUser);
 router.route("/refresh-token").post(refreshAccessToken);
 router.route("/change-password").post(verifyJwt, changeCurrentPassword);
-router.route("/get-current-user").post(verifyJwt, getCurrentUser);
-router.route("/update-details").post(verifyJwt, updateAccountDetails);
-router.route("/change-avatar").post(
-    upload.single("avatar"),
+
+// get because not taking data from frontend only data is send to frontend
+router.route("/get-current-user").get(verifyJwt, getCurrentUser);
+
+// using patch for updating the details 
+router.route("/update-details").patch(verifyJwt, updateAccountDetails);
+
+router.route("/change-avatar").patch(
     verifyJwt,
+    upload.single("avatar"),
     UpdateUserAvatar
 );
-router.route("/update-cover-image").post(
-    upload.single("coverImage"),
+
+
+router.route("/update-cover-image").patch(
     verifyJwt,
+    upload.single("coverImage"),
     updateCoverImage
 )
+
+router.route("/c/:username").get(verifyJwt,getUserChannelProfile);
+
+router.route("/history").get(verifyJwt,getWatchHistory)
 
 export default router;
