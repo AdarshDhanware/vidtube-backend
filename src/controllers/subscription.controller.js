@@ -7,10 +7,10 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const toggleSubscription = asyncHandler(async (req, res) => {
     const { channelId } = req.params;
-    // TODO: toggle subscription
+    // toggle subscription
     const user = req.user;
     if (!user) {
-        throw new ApiError(400, "Unauthorized accesss");
+        throw new ApiError(401, "Unauthorized accesss");
     }
 
     // if already subscribed then unsubscribe it
@@ -43,7 +43,7 @@ const toggleSubscription = asyncHandler(async (req, res) => {
 
     const done = await Subscription.findById(subscribe._id)
     if(!done){
-        throw new ApiError(400,"An error occured")
+        throw new ApiError(409,"An error occured")
     }
 
     return res
@@ -63,7 +63,7 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 
     const user = req.user;
     if(!user){
-        throw new ApiError(400,"Unauthorized access")
+        throw new ApiError(401,"Unauthorized access")
     }
 
     
@@ -94,7 +94,7 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
     )
 
     if(!SubscriberList){
-        throw new ApiError(400,"An error occured")
+        throw new ApiError(409,"An error occured")
     }
 
     if(!SubscriberList.length){
@@ -118,7 +118,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
     const { subscriberId } = req.params;
     const user=req.user;
     if(!user){
-        throw new ApiError(400,"Unauthorized access")
+        throw new ApiError(401,"Unauthorized access")
     }
 
     const channelList = await Subscription.aggregate(
@@ -150,7 +150,7 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
     )
     
     if(!channelList){
-        throw new ApiError(400,"An error occured")
+        throw new ApiError(409,"An error occured")
     }
 
     if(!channelList.length){

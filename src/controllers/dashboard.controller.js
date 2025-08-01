@@ -8,7 +8,7 @@ import {asyncHandler} from "../utils/asyncHandler.js"
 import { User } from "../models/user.model.js"
 
 const getChannelStats = asyncHandler(async (req, res) => {
-    // TODO: Get the channel stats like total video views, total subscribers, total videos, total likes etc.
+    // Get the channel stats like total video views, total subscribers, total videos, total likes etc.
     const userId = req.user._id;
 
     if(!userId){
@@ -71,7 +71,7 @@ const getChannelStats = asyncHandler(async (req, res) => {
     ])
 
     if(!data){
-        throw new ApiError(400,"No Data found")
+        throw new ApiError(404,"No Data found")
     }
 
     return res
@@ -86,7 +86,7 @@ const getChannelStats = asyncHandler(async (req, res) => {
 })
 
 const getChannelVideos = asyncHandler(async (req, res) => {
-    // TODO: Get all the videos uploaded by the channel
+    // Get all the videos uploaded by the channel
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 

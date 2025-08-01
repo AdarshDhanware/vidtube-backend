@@ -108,8 +108,6 @@ const registerUser = asyncHandler(async (req, res) => {
         "-password -refreshToken"
     );
 
-    // console.log(createdUser);
-
     if (!createdUser) {
         throw new ApiError(
             500,
@@ -271,7 +269,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 });
 
-// my one
 const changeCurrentPassword = asyncHandler(async (req, res) => {
     const userId = req.user?._id; // by auth middleware
 
@@ -317,54 +314,6 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, "Password changed successfully"));
 });
 
-// tutorial
-// const changeCurrentPassword = asyncHandler(async (req,res) => {
-//     const {oldPassword,newPassword} = req.body;
-
-//     const user = await User.findById(req.user?._id)
-//     const isCorrectPassword=await user.isPasswordCorrect(oldPassword);
-
-//     if(!isCorrectPassword){
-//         throw new ApiError(400,"Invalid old password")
-//     }
-
-//     user.password=newPassword
-
-//     await user.save({validateBeforeSave:false})
-
-//     return res
-//     .status(200)
-//     .json(
-//         new ApiResponse(200,"Password Changed sucessfully")
-//     )
-
-// })
-
-// by me
-// const getCurrentUser = asyncHandler(async (req,res) => {
-//     const userId = req.user?._id;
-
-//     if(!userId){
-//         throw new ApiError(400,"Unauthorized access")
-//     }
-
-//     const user =await User.findById(userId).select("-password -refreshToken");
-
-//     if(!user){
-//         throw new ApiError(400,"Unauthorized request")
-//     }
-
-//     return res
-//     .status(200)
-//     .json(
-//         new ApiResponse(200,
-//             user,
-//             "Current user fetched successfully")
-//     )
-
-// })
-
-// tutorial
 const getCurrentUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
@@ -373,7 +322,6 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         );
 });
 
-// by me
 const updateAccountDetails = asyncHandler(async (req, res) => {
     const { fullName, email } = req.body;
 
@@ -410,88 +358,6 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, updated, "Details update successfully"));
 });
 
-// tutorial
-// const updateAccountDetails= asyncHandler(async (req,res)=>{
-//     const {fullName,email} = req.body
-
-//     if(!fullName || !email){
-//         throw new ApiError(400,"All fields are required")
-//     }
-
-//     const user = await User.findByIdAndUpdate(
-//         req.user?._id,
-//         {
-//             $set:{
-//                 fullName,
-//                 email
-//             }
-//         },
-//         {
-//             new:true
-//         }
-//     ).select("-password")
-
-//     return res.status(200)
-//     .json(
-//         new ApiResponse(200,user,"Account details updated successfully")
-//     )
-
-// })
-
-// by me - correct but require optimization
-// const UpdateUserAvatar = asyncHandler(async(req,res)=>{
-//     const {avatar} = req.files;
-
-//     if(!avatar){
-//         throw new ApiError(400,"Avatar is required.")
-//     }
-
-//     const avatarLocalPath=avatar[0].path
-
-//     const avatarUrl = await uploadOnCloudinary(avatarLocalPath);
-
-//     if(!avatarUrl){
-//         throw new ApiError(400,"Upload failed")
-//     }
-
-//     const newAvatarUrl = avatarUrl.url;
-
-//     if(!newAvatarUrl){
-//         throw new ApiError(500,"Internal server error")
-//     }
-
-//     const userId = req.user?._id;
-
-//     if(!userId){
-//         throw new ApiError(400,"Unauthorized access")
-//     }
-
-//     const user =await User.findByIdAndUpdate(
-//         userId,
-//         {
-//             $set:{avatar:newAvatarUrl}
-//         },{
-//             new:true
-//         }
-//     ).select("-password -refreshToken")
-
-//     if(!user){
-//         throw new ApiError(400,"Avatar image change failed")
-//     }
-
-//     return res
-//     .status(200)
-//     .json(
-//         new ApiResponse(
-//             200,
-//             user,
-//             "Avatar image change successfully"
-//         )
-//     )
-
-// })
-
-// tutorial - optimized
 const UpdateUserAvatar = asyncHandler(async (req, res) => {
     const avatarLocalPath = req.file?.path;
 
@@ -518,7 +384,6 @@ const UpdateUserAvatar = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, user, "New avatar uploaded successfully"));
 });
 
-// by me
 const updateCoverImage = asyncHandler(async (req, res) => {
     const coverImageLocalPath = req.file?.path;
 

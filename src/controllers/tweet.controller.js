@@ -6,7 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const createTweet = asyncHandler(async (req, res) => {
-    //TODO: create tweet
+    // create tweet
     const { content } = req.body;
     if (!content || !content.trim()) {
         throw new ApiError(400, "Tweet content is required.");
@@ -14,7 +14,7 @@ const createTweet = asyncHandler(async (req, res) => {
 
     const user = req.user;
     if (!user) {
-        throw new ApiError(400, "Unauthorized access");
+        throw new ApiError(401, "Unauthorized access");
     }
 
     const newTweet = await Tweet.create({
@@ -31,7 +31,7 @@ const createTweet = asyncHandler(async (req, res) => {
 });
 
 const getUserTweets = asyncHandler(async (req, res) => {
-    // TODO: get user tweets
+    // get user tweets
     const { userId } = req.params;
 
     const user = req.user;
@@ -46,7 +46,7 @@ const getUserTweets = asyncHandler(async (req, res) => {
     }
 
     if (!userTweet.length) {
-        throw new ApiError(401, "No tweet find");
+        throw new ApiError(404, "No tweet found");
     }
 
     return res
@@ -55,7 +55,7 @@ const getUserTweets = asyncHandler(async (req, res) => {
 });
 
 const updateTweet = asyncHandler(async (req, res) => {
-    //TODO: update tweet
+    // update tweet
     const { tweetId } = req.params;
 
     const { content } = req.body;
@@ -79,7 +79,7 @@ const updateTweet = asyncHandler(async (req, res) => {
     );
 
     if (!updatedTweet) {
-        throw new ApiError(404, "Tweet not found or not authorized to update");
+        throw new ApiError(500, "Tweet update failed");
     }
 
     return res
@@ -88,10 +88,10 @@ const updateTweet = asyncHandler(async (req, res) => {
 });
 
 const deleteTweet = asyncHandler(async (req, res) => {
-    //TODO: delete tweet
+    // delete tweet
     const { tweetId } = req.params;
     if (!tweetId) {
-        throw new ApiError(409, "An error occured");
+        throw new ApiError(400, "An error occured");
     }
 
     const user = req.user;
@@ -104,7 +104,7 @@ const deleteTweet = asyncHandler(async (req, res) => {
         owner: user._id,
     });
     if (!deletedTweet) {
-        throw new ApiError(404, "Tweet not found or not authorized to delete");
+        throw new ApiError(500, "Tweet delete failed");
     }
 
     return res

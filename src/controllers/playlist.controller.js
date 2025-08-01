@@ -7,15 +7,15 @@ import { Video } from "../models/video.model.js";
 
 const createPlaylist = asyncHandler(async (req, res) => {
     const { name, description } = req.body;
-    //TODO: create playlist
+    // create playlist
     if (!name || !description) {
-        throw new ApiError(404, "Empty fields");
+        throw new ApiError(400, "Empty fields");
     }
 
     const userId = req.user._id;
 
     if (!userId) {
-        throw new ApiError(404, "Unauthorized access");
+        throw new ApiError(401, "Unauthorized access");
     }
 
     const newPlaylist = await Playlist.create({
@@ -26,7 +26,7 @@ const createPlaylist = asyncHandler(async (req, res) => {
 
     const check = await Playlist.findById(newPlaylist._id);
     if (!check) {
-        throw new ApiError(404, "Playlist creation failed");
+        throw new ApiError(409, "Playlist creation failed");
     }
 
     return res
@@ -38,16 +38,16 @@ const createPlaylist = asyncHandler(async (req, res) => {
 
 const getUserPlaylists = asyncHandler(async (req, res) => {
     const { userId } = req.params;
-    //TODO: get user playlists
+    // get user playlists
     if (!userId) {
-        throw new ApiError(404, "Unauthorized access");
+        throw new ApiError(401, "Unauthorized access");
     }
 
     const userPlaylist = await Playlist.find({ owner: userId });
 
     if (!userPlaylist) {
         throw new ApiError(
-            404,
+            409,
             "An error occured while fetching the playlists"
         );
     }
@@ -66,14 +66,14 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
 const getPlaylistById = asyncHandler(async (req, res) => {
     const { playlistId } = req.params;
     const { page = 1, limit = 10 } = req.query;
-    //TODO: get playlist by id
+    // get playlist by id
     if (!playlistId) {
         throw new ApiError(404, "No playlist found");
     }
 
     const userId = req.user._id;
     if (!userId) {
-        throw new ApiError(404, "Unauthorized access");
+        throw new ApiError(401, "Unauthorized access");
     }
 
     const playlist = await Playlist.findOne({ _id: playlistId, owner: userId });
@@ -124,11 +124,11 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
     const userId = req.user._id;
     if (!userId) {
-        throw new ApiError(404, "Unauthorized accesss");
+        throw new ApiError(401, "Unauthorized accesss");
     }
 
     if (!playlistId || !videoId) {
-        throw new ApiError(404, "An error occured");
+        throw new ApiError(400, "An error occured");
     }
 
     const playlist = await Playlist.findOne({ _id: playlistId, owner: userId });
@@ -154,11 +154,11 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
     const { playlistId, videoId } = req.params;
-    // TODO: remove video from playlist
+    // remove video from playlist
 
     const userId = req.user._id;
     if (!userId) {
-        throw new ApiError(404, "Unauthorized access");
+        throw new ApiError(401, "Unauthorized access");
     }
 
     await Playlist.findOneAndUpdate(
@@ -178,10 +178,10 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
 
 const deletePlaylist = asyncHandler(async (req, res) => {
     const { playlistId } = req.params;
-    // TODO: delete playlist
+    //  delete playlist
     const user = req.user;
     if (!user) {
-        throw new ApiError(404, "Unauthorized access");
+        throw new ApiError(401, "Unauthorized access");
     }
 
     await Playlist.findOneAndDelete({ _id: playlistId, owner: user._id });
@@ -194,15 +194,15 @@ const deletePlaylist = asyncHandler(async (req, res) => {
 const updatePlaylist = asyncHandler(async (req, res) => {
     const { playlistId } = req.params;
     const { name, description } = req.body;
-    //TODO: update playlist
+    // update playlist
 
     const user = req.user;
     if (!user) {
-        throw new ApiError(404, "Unauthorized access");
+        throw new ApiError(401, "Unauthorized access");
     }
 
     if (!name?.trim() || !description?.trim()) {
-        throw new ApiError(404, "Empty fields are not accepted");
+        throw new ApiError(400, "Empty fields are not accepted");
     }
 
     const playlist = await Playlist.findOne({ _id: playlistId, owner: user._id });

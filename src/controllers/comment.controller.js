@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getVideoComments = asyncHandler(async (req, res) => {
-    //TODO: get all comments for a video
+    //get all comments for a video
     const {videoId} = req.params
     const {page = 1, limit = 10} = req.query
 
@@ -41,11 +41,11 @@ const getVideoComments = asyncHandler(async (req, res) => {
 })
 
 const addComment = asyncHandler(async (req, res) => {
-    // TODO: add a comment to a video
+    // add a comment to a video
     const userId = req.user._id
 
     if(!userId){
-        throw new ApiError(404,"Unauthorized Access")
+        throw new ApiError(401,"Unauthorized Access")
     }
 
     const {videoId} = req.params
@@ -68,7 +68,7 @@ const addComment = asyncHandler(async (req, res) => {
     const check = await Comment.findOne(comment._id);
 
     if(!check){
-        throw new ApiError(409,"Comment failed")
+        throw new ApiError(400,"Comment failed")
     }
 
     return res
@@ -84,12 +84,12 @@ const addComment = asyncHandler(async (req, res) => {
 })
 
 const updateComment = asyncHandler(async (req, res) => {
-    // TODO: update a comment
+    // update a comment
     const {commentId} = req.params;
     const {content} = req.body;
 
     if(!content || content.trim() ===""){
-        throw new ApiError(409,"Empty fields")
+        throw new ApiError(400,"Empty fields")
     }
 
     if(!commentId){
@@ -119,7 +119,7 @@ const updateComment = asyncHandler(async (req, res) => {
 })
 
 const deleteComment = asyncHandler(async (req, res) => {
-    // TODO: delete a comment
+    // delete a comment
     const {commentId} = req.params
 
     if(!commentId){

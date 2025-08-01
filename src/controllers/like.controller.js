@@ -7,7 +7,7 @@ import { Video } from "../models/video.model.js"
 
 const toggleVideoLike = asyncHandler(async (req, res) => {
     const {videoId} = req.params
-    //TODO: toggle like on video
+    // toggle like on video
     if(!videoId){
         throw new ApiError(404,"Video not found")
     }
@@ -15,7 +15,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     const userId = req.user._id
 
     if(!userId){
-        throw new ApiError(404,"Unauthorized access")
+        throw new ApiError(401,"Unauthorized access")
     }
 
     const videoLike = await Like.create(
@@ -28,7 +28,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     const check = await Like.findById(videoLike._id)
     
     if(!check){
-        throw new ApiError(404,"Video not liked")
+        throw new ApiError(409,"Video not liked")
     }
 
     return res
@@ -44,10 +44,10 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
 
 const toggleCommentLike = asyncHandler(async (req, res) => {
     const {commentId} = req.params
-    //TODO: toggle like on comment
+    // toggle like on comment
     const userId = req.user._id;
     if(!userId){
-        throw new ApiError(404,"Unauthorized access")
+        throw new ApiError(401,"Unauthorized access")
     }
 
     const commentLike = await Like.create(
@@ -59,7 +59,7 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
 
     const check =  await Like.findById(commentLike._id)
     if(!check){
-        throw new ApiError(404,"Comment not liked")
+        throw new ApiError(409,"Comment not liked")
     }
 
     return res
@@ -76,10 +76,10 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
 
 const toggleTweetLike = asyncHandler(async (req, res) => {
     const {tweetId} = req.params
-    //TODO: toggle like on tweet
+    // toggle like on tweet
     const userId = req.user._id;
     if(!userId){
-        throw new ApiError(404,"Unauthorized access")
+        throw new ApiError(401,"Unauthorized access")
     }
 
     const tweetLike = await Like.create(
@@ -91,7 +91,7 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
 
     const check =  await Like.findById(tweetLike._id)
     if(!check){
-        throw new ApiError(404,"Comment not liked")
+        throw new ApiError(409,"Comment not liked")
     }
 
     return res
@@ -107,12 +107,12 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
 )
 
 const getLikedVideos = asyncHandler(async (req, res) => {
-    //TODO: get all liked videos
+    // get all liked videos
     const {page=1,limit=10} = req.query
 
     const userId = req.user;
     if(!userId){
-        throw new ApiError(404,"Unauthorized access")
+        throw new ApiError(401,"Unauthorized access")
     }
 
     const likedDoc = await Like.find(
